@@ -49,8 +49,9 @@ public class ExecutionOptions<R> {
      * @param response the HttpResponse
      */
     public void propagate(HttpResponse response) {
-        if (propagateResponse != null)
+        if (propagateResponse != null) {
             propagateResponse.propagate(response);
+        }
     }
 } 
 

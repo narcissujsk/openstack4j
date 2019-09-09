@@ -188,14 +188,15 @@ public class KeystoneToken implements Token {
     @Override
     public String getCacheIdentifier() {
         String uniq = null;
-        if (getProject() != null)
+        if (getProject() != null) {
             uniq = getProject().getId();
-        else if (getDomain() != null)
+        } else if (getDomain() != null) {
             uniq = getDomain().getId();
-        else if (user != null)
+        } else if (user != null) {
             uniq = user.getId();
-        else
+        } else {
             uniq = "";
+        }
         return String.format("%s:%s", endpoint, uniq);
 
     }

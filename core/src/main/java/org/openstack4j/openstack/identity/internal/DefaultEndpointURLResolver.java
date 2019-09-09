@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
  * @author Jeremy Unruh
  */
 public class DefaultEndpointURLResolver implements EndpointURLResolver {
-    
     private static final Logger LOG = LoggerFactory.getLogger(DefaultEndpointURLResolver.class);
     private static final Map<Key, String> CACHE = new ConcurrentHashMap<Key, String>();
     private static boolean LEGACY_EP_HANDLING = Boolean.getBoolean(LEGACY_EP_RESOLVING_PROP);
@@ -40,15 +39,17 @@ public class DefaultEndpointURLResolver implements EndpointURLResolver {
         Key key = Key.of(p.access.getCacheIdentifier(), p.type, p.perspective, p.region);
         String url = CACHE.get(key);
 
-        if (url != null)
+        if (url != null) {
             return url;
+        }
 
         url = resolveV2(p);
 
         if (url != null) {
             return url;
-        } else if (p.region != null)
+        } else if (p.region != null) {
             throw RegionEndpointNotFoundException.create(p.region, p.type.getServiceName());
+        }
 
         return p.access.getEndpoint();
     }
@@ -64,16 +65,18 @@ public class DefaultEndpointURLResolver implements EndpointURLResolver {
 
         String url = CACHE.get(key);
 
-        if (url != null)
+        if (url != null) {
             return url;
+        }
 
         url = resolveV3(p);
 
         if (url != null) {
             CACHE.put(key, url);
             return url;
-        } else if (p.region != null)
+        } else if (p.region != null) {
             throw RegionEndpointNotFoundException.create(p.region, p.type.getServiceName());
+        }
 
         return p.token.getEndpoint();
     }
@@ -89,15 +92,17 @@ public class DefaultEndpointURLResolver implements EndpointURLResolver {
         if (!services.isEmpty()) {
             Access.Service sc = p.getV2Resolver().resolveV2(p.type, services);
             for (org.openstack4j.model.identity.v2.Endpoint ep : sc.getEndpoints()) {
-                if (p.region != null && !p.region.equalsIgnoreCase(ep.getRegion()))
+                if (p.region != null && !p.region.equalsIgnoreCase(ep.getRegion())) {
                     continue;
+                }
 
                 if (sc.getServiceType() == ServiceType.NETWORK) {
                     sc.getEndpoints().get(0).toBuilder().type(sc.getServiceType().name());
                 }
 
-                if (p.perspective == null)
+                if (p.perspective == null) {
                     return getEndpointURL(p.access, ep);
+                }
 
                 switch (p.perspective) {
                 case ADMIN:
@@ -136,11 +141,10 @@ public class DefaultEndpointURLResolver implements EndpointURLResolver {
                 if (p.perspective == null) {
                     p.perspective = Facing.PUBLIC;
                 }
-
                 for (org.openstack4j.model.identity.v3.Endpoint ep : service.getEndpoints()) {
-
-                    if (matches(ep, p))
+                    if (matches(ep, p)) {
                         return ep.getUrl().toString();
+                    }
                 }
             }
         }
@@ -223,22 +227,29 @@ public class DefaultEndpointURLResolver implements EndpointURLResolver {
 
         @Override
         public boolean equals(Object obj) {
-            if (this == obj)
+            if (this == obj) {
                 return true;
-            if (obj == null)
+            }
+            if (obj == null) {
                 return false;
-            if (getClass() != obj.getClass())
+            }
+            if (getClass() != obj.getClass()) {
                 return false;
+            }
             Key other = (Key) obj;
-            if (perspective != other.perspective)
+            if (perspective != other.perspective) {
                 return false;
-            if (type != other.type)
+            }
+            if (type != other.type) {
                 return false;
+            }
             if (uid == null) {
-                if (other.uid != null)
+                if (other.uid != null) {
                     return false;
-            } else if (!uid.equals(other.uid))
+                }
+            } else if (!uid.equals(other.uid)) {
                 return false;
+            }
             return true;
         }
     }

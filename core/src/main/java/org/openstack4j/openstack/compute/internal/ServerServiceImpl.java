@@ -97,8 +97,9 @@ public class ServerServiceImpl extends BaseComputeServices implements ServerServ
 
     private List<? extends Server> list(boolean detail, boolean allTenants) {
         Invocation<Servers> req = get(Servers.class, uri("/servers" + ((detail) ? "/detail" : "")));
-        if (allTenants)
+        if (allTenants) {
             req.param("all_tenants", 1);
+        }
         return req.execute().getList();
     }
 
@@ -163,8 +164,9 @@ public class ServerServiceImpl extends BaseComputeServices implements ServerServ
         checkNotNull(serverId);
 
         ServerAction instance = BasicActions.actionInstanceFor(action);
-        if (instance == null)
+        if (instance == null) {
             return ActionResponse.actionFailed(String.format("Action %s was not found in the list of invokable actions", action), 412);
+        }
 
         return invokeAction(serverId, instance);
     }
@@ -279,10 +281,11 @@ public class ServerServiceImpl extends BaseComputeServices implements ServerServ
 
         // Build options with the given numLines or default to full output
         ConsoleOutputOptions consoleOutputOptions;
-        if (numLines <= 0)
-        	consoleOutputOptions = new ConsoleOutputOptions();
-        else
-        	consoleOutputOptions = new ConsoleOutputOptions(numLines);
+        if (numLines <= 0) {
+            consoleOutputOptions = new ConsoleOutputOptions();
+        } else {
+            consoleOutputOptions = new ConsoleOutputOptions(numLines);
+        }
 
         ConsoleOutput c = post(ConsoleOutput.class, uri("/servers/%s/action", serverId))
                 .entity(consoleOutputOptions).execute();
@@ -295,8 +298,9 @@ public class ServerServiceImpl extends BaseComputeServices implements ServerServ
     @Override
     public VNCConsole getVNCConsole(String serverId, Type type) {
         checkNotNull(serverId);
-        if (type == null)
+        if (type == null) {
             type = Type.NOVNC;
+        }
 
         return post(NovaVNCConsole.class, uri("/servers/%s/action", serverId))
                     .entity(NovaVNCConsole.getConsoleForType(type))
@@ -355,8 +359,9 @@ public class ServerServiceImpl extends BaseComputeServices implements ServerServ
     @Override
     public ActionResponse liveMigrate(String serverId, LiveMigrateOptions options) {
         checkNotNull(serverId);
-        if (options == null)
+        if (options == null) {
             options = LiveMigrateOptions.create();
+        }
         return invokeAction(serverId, LiveMigrationAction.create(options));
     }
 
@@ -371,7 +376,7 @@ public class ServerServiceImpl extends BaseComputeServices implements ServerServ
     }
 
     /**
-     * {{@link #invokeAction(String, String)}
+     *
      */
     @Override
     public ActionResponse backupServer(String serverId, BackupOptions options) {
@@ -402,8 +407,9 @@ public class ServerServiceImpl extends BaseComputeServices implements ServerServ
         while ( duration < maxTime ) {
             server = get(serverId);
 
-            if (server == null || server.getStatus() == status || server.getStatus() == Status.ERROR)
+            if (server == null || server.getStatus() == status || server.getStatus() == Status.ERROR) {
                 break;
+            }
 
             duration += sleep(1000);
         }

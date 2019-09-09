@@ -27,6 +27,10 @@ public final class Config {
     private ServiceVersionResolver resolver;
     private EndpointURLResolver endpointURLResolver;
 
+    private boolean ironicApiVersionEnable;
+
+    private String  ironicApiVersion;
+
     private Config() {
     }
 
@@ -172,6 +176,32 @@ public final class Config {
         this.ignoreSSLVerification = Boolean.TRUE;
         return this;
     }
+    public Config withIronicApiVersionDisabled() {
+        this.ironicApiVersionEnable = Boolean.FALSE;
+        return this;
+    }
+
+    public Config withIronicApiVersion(String ironicApiVersion) {
+        this.ironicApiVersion=ironicApiVersion;
+        this.ironicApiVersionEnable = Boolean.TRUE;
+        return this;
+    }
+
+    public boolean isIronicApiVersionEnable() {
+        return ironicApiVersionEnable;
+    }
+
+    public void setIronicApiVersionEnable(boolean ironicApiVersionEnable) {
+        this.ironicApiVersionEnable = ironicApiVersionEnable;
+    }
+
+    public String getIronicApiVersion() {
+        return ironicApiVersion;
+    }
+
+    public void setIronicApiVersion(String ironicApiVersion) {
+        this.ironicApiVersion = ironicApiVersion;
+    }
 
     public ServiceVersionResolver getResolver() {
         return resolver;
@@ -243,33 +273,45 @@ public final class Config {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         Config other = (Config) obj;
-        if (connectTimeout != other.connectTimeout)
+        if (connectTimeout != other.connectTimeout) {
             return false;
-        if (maxConnections != other.maxConnections)
+        }
+        if (maxConnections != other.maxConnections) {
             return false;
-        if (maxConnectionsPerRoute != other.maxConnectionsPerRoute)
+        }
+        if (maxConnectionsPerRoute != other.maxConnectionsPerRoute) {
             return false;
-        if (ignoreSSLVerification != other.ignoreSSLVerification)
+        }
+        if (ignoreSSLVerification != other.ignoreSSLVerification) {
             return false;
+        }
         if (natHostOrIP == null) {
-            if (other.natHostOrIP != null)
+            if (other.natHostOrIP != null) {
                 return false;
-        } else if (!natHostOrIP.equals(other.natHostOrIP))
+            }
+        } else if (!natHostOrIP.equals(other.natHostOrIP)) {
             return false;
-        if (readTimeout != other.readTimeout)
+        }
+        if (readTimeout != other.readTimeout) {
             return false;
+        }
         if (proxy == null) {
-            if (other.proxy != null)
+            if (other.proxy != null) {
                 return false;
-        } else if (!proxy.equals(other.proxy))
+            }
+        } else if (!proxy.equals(other.proxy)) {
             return false;
+        }
         if(sslContext == null) {
         	if(other.getSslContext() != null) {
         		return false;

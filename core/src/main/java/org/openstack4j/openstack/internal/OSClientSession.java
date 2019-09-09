@@ -10,6 +10,7 @@ import org.openstack4j.api.OSClient.OSClientV2;
 import org.openstack4j.api.OSClient.OSClientV3;
 import org.openstack4j.api.artifact.ArtifactService;
 import org.openstack4j.api.barbican.BarbicanService;
+import org.openstack4j.api.baremetal.BaremetalService;
 import org.openstack4j.api.client.CloudProvider;
 import org.openstack4j.api.compute.ComputeService;
 import org.openstack4j.api.dns.v2.DNSService;
@@ -116,6 +117,10 @@ public abstract class OSClientSession<R, T extends OSClient<T>> implements Endpo
      */
     public ComputeService compute() {
         return Apis.getComputeServices();
+    }
+
+    public BaremetalService baremetal() {
+        return Apis.getBaremetalServices();
     }
 
     /**
@@ -464,16 +469,17 @@ public abstract class OSClientSession<R, T extends OSClient<T>> implements Endpo
 
         @Override
         public Set<ServiceType> getSupportedServices() {
-            if (supports == null)
+            if (supports == null) {
                 supports = Sets.immutableEnumSet(Iterables.transform(access.getServiceCatalog(),
                         new org.openstack4j.openstack.identity.v2.functions.ServiceToServiceType()));
+            }
             return supports;
         }
 
     }
 
     public static class OSClientSessionV3 extends OSClientSession<OSClientSessionV3, OSClientV3> implements OSClientV3 {
-
+        org.apache.log4j.Logger logger= org.apache.log4j.Logger.getLogger("OSClientSessionV3");
         Token token;
         
         protected String reqId;
@@ -539,14 +545,17 @@ public abstract class OSClientSession<R, T extends OSClient<T>> implements Endpo
          */
         @Override
         public String getEndpoint(ServiceType service) {
-        	
+            logger.info("servicetype:"+ service.getType()+" "+service.getServiceName());
         	final EndpointURLResolver eUrlResolver = (config != null && config.getEndpointURLResolver() != null) ? config.getEndpointURLResolver() : fallbackEndpointUrlResolver;
-        	
-            return addNATIfApplicable(eUrlResolver.findURLV3(URLResolverParams
+            String urlv3 = eUrlResolver.findURLV3(URLResolverParams
                     .create(token, service)
                     .resolver(config != null ? config.getResolver() : null)
                     .perspective(perspective)
-                    .region(region)));
+                    .region(region));
+            logger.info("urlv3:"+ urlv3);
+            String endpoint = addNATIfApplicable(urlv3);
+            logger.info("endpoint:"+ endpoint);
+            return endpoint;
         }
 
         /**
@@ -570,9 +579,10 @@ public abstract class OSClientSession<R, T extends OSClient<T>> implements Endpo
          */
         @Override
         public Set<ServiceType> getSupportedServices() {
-            if (supports == null)
+            if (supports == null) {
                 supports = Sets.immutableEnumSet(Iterables.transform(token.getCatalog(),
                         new org.openstack4j.openstack.identity.v3.functions.ServiceToServiceType()));
+            }
             return supports;
         }
 

@@ -6,6 +6,7 @@ public enum ServiceType {
 	IDENTITY("keystone", "identity"),
 	APP_CATALOG("murano", "application-catalog"),
 	COMPUTE("nova", "compute"),
+    BAREMETAL("ironic", "baremetal"),
 	IMAGE("glance", "image"),
 	BLOCK_STORAGE("cinder", "volume"),
 	OBJECT_STORAGE("object-store", "object-store"),
@@ -63,8 +64,9 @@ public enum ServiceType {
         }
         for (ServiceType s : ServiceType.values())
         {
-            if(s.getServicePattern().matcher(name).matches())
+            if(s.getServicePattern().matcher(name).matches()) {
                 return s;
+            }
         }
         return ServiceType.UNKNOWN;
     }

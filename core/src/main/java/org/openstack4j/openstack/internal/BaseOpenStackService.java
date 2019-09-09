@@ -3,21 +3,14 @@ package org.openstack4j.openstack.internal;
 import static org.openstack4j.core.transport.ClientConstants.HEADER_USER_AGENT;
 import static org.openstack4j.core.transport.ClientConstants.USER_AGENT;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedSet;
+import java.util.*;
 
+import org.apache.log4j.Logger;
 import org.openstack4j.api.client.CloudProvider;
 import org.openstack4j.api.exceptions.OS4JException;
 import org.openstack4j.api.types.ServiceType;
-import org.openstack4j.core.transport.ClientConstants;
-import org.openstack4j.core.transport.ExecutionOptions;
-import org.openstack4j.core.transport.HttpMethod;
-import org.openstack4j.core.transport.HttpRequest;
+import org.openstack4j.core.transport.*;
 import org.openstack4j.core.transport.HttpRequest.RequestBuilder;
-import org.openstack4j.core.transport.HttpResponse;
 import org.openstack4j.core.transport.internal.HttpExecutor;
 import org.openstack4j.model.ModelEntity;
 import org.openstack4j.model.common.ActionResponse;
@@ -31,14 +24,14 @@ import com.google.common.base.Joiner;
 
 
 public class BaseOpenStackService {
-
+    Logger logger = Logger.getLogger("BaseOpenStackService");
     ServiceType serviceType = ServiceType.IDENTITY;
     Function<String, String> endpointFunc;
-    
+
     private static ThreadLocal<String> reqIdContainer = new ThreadLocal<String>();
-    
+
     public String getXOpenstackRequestId() {
-    	return reqIdContainer.get();
+        return reqIdContainer.get();
     }
 
     protected BaseOpenStackService() {
@@ -58,14 +51,19 @@ public class BaseOpenStackService {
     }
 
     protected <R> Invocation<R> post(Class<R> returnType, String... path) {
+        logger.info("" + path + " ");
         return builder(returnType, path, HttpMethod.POST);
     }
 
     protected <R> Invocation<ActionResponse> postWithResponse(String... path) {
+        System.out.println(path);
+
         return builder(ActionResponse.class, path, HttpMethod.POST);
     }
 
     protected <R> Invocation<R> put(Class<R> returnType, String... path) {
+        System.out.println(path);
+        logger.info("" + path + " ");
         return builder(returnType, path, HttpMethod.PUT);
     }
 
@@ -74,10 +72,14 @@ public class BaseOpenStackService {
     }
 
     protected <R> Invocation<ActionResponse> patchWithResponse(String... path) {
+        System.out.println(path);
+        logger.info("" + path + " ");
         return builder(ActionResponse.class, path, HttpMethod.PATCH);
     }
 
     protected <R> Invocation<R> delete(Class<R> returnType, String... path) {
+        System.out.println(path);
+        logger.info("" + path + " ");
         return builder(returnType, path, HttpMethod.DELETE);
     }
 
@@ -86,25 +88,34 @@ public class BaseOpenStackService {
     }
 
     protected <R> Invocation<R> head(Class<R> returnType, String... path) {
+        logger.info("" + path + " ");
         return builder(returnType, path, HttpMethod.HEAD);
     }
 
     protected <R> Invocation<R> request(HttpMethod method, Class<R> returnType, String path) {
+        logger.info("" + path + " ");
         return builder(returnType, path, method);
     }
 
     protected String uri(String path, Object... params) {
-        if (params.length == 0)
+        if (params.length == 0) {
             return path;
+        }
+        logger.info("" + path + " ");
         return String.format(path, params);
     }
 
     private <R> Invocation<R> builder(Class<R> returnType, String[] path, HttpMethod method) {
+        for (int i = 0; i < path.length; i++) {
+            logger.info(path[i]);
+        }
+        logger.info(returnType);
         return builder(returnType, Joiner.on("").join(path), method);
     }
 
     @SuppressWarnings("rawtypes")
     private <R> Invocation<R> builder(Class<R> returnType, String path, HttpMethod method) {
+        logger.info(path);
         OSClientSession ses = OSClientSession.getCurrent();
         if (ses == null) {
             throw new OS4JException(
@@ -113,15 +124,28 @@ public class BaseOpenStackService {
         RequestBuilder<R> req = HttpRequest.builder(returnType).endpointTokenProvider(ses).config(ses.getConfig())
                 .method(method).path(path);
         Map headers = ses.getHeaders();
-        if (headers != null && headers.size() > 0){
+        Config config = ses.getConfig();
+        if (headers == null) {
+            headers=new HashMap<String,Object> ();
+        }
+        logger.info(ClientConstants.HEADER_X_OpenStack_Ironic_API_Version);
+        logger.info(config.getIronicApiVersion());
+        logger.info(config.isIronicApiVersionEnable());
+        if (config.isIronicApiVersionEnable()) {
+            headers.put(ClientConstants.HEADER_X_OpenStack_Ironic_API_Version, config.getIronicApiVersion());
+        }
+        logger.info(headers);
+        logger.info(serviceType);
+        if (headers != null && headers.size() > 0) {
             return new Invocation<R>(req, serviceType, endpointFunc).headers(headers);
-        }else{ 
+        } else {
             return new Invocation<R>(req, serviceType, endpointFunc);
         }
     }
 
     protected static class Invocation<R> {
         RequestBuilder<R> req;
+        Logger logger = Logger.getLogger("BaseOpenStackService");
 
         protected Invocation(RequestBuilder<R> req, ServiceType serviceType, Function<String, String> endpointFunc) {
             this.req = req;
@@ -145,23 +169,27 @@ public class BaseOpenStackService {
 
         public Invocation<R> params(Map<String, ? extends Object> params) {
             if (params != null) {
-                for (String name : params.keySet())
+                for (String name : params.keySet()) {
                     req.queryParam(name, params.get(name));
+                }
             }
             return this;
         }
 
         public Invocation<R> param(boolean condition, String name, Object value) {
-            if (condition)
+            if (condition) {
                 req.queryParam(name, value);
+            }
             return this;
         }
 
         public Invocation<R> paramLists(Map<String, ? extends Iterable<? extends Object>> params) {
             if (params != null) {
-                for (Map.Entry<String, ? extends Iterable<? extends Object>> pair : params.entrySet())
-                    for (Object value : pair.getValue())
+                for (Map.Entry<String, ? extends Iterable<? extends Object>> pair : params.entrySet()) {
+                    for (Object value : pair.getValue()) {
                         req.queryParam(pair.getKey(), value);
+                    }
+                }
             }
             return this;
         }
@@ -193,8 +221,9 @@ public class BaseOpenStackService {
         }
 
         public Invocation<R> headers(Map<String, ? extends Object> headers) {
-            if (headers != null)
+            if (headers != null) {
                 req.headers(headers);
+            }
             return this;
         }
 
@@ -208,34 +237,35 @@ public class BaseOpenStackService {
         }
 
         public R execute(ExecutionOptions<R> options) {
+
             header(HEADER_USER_AGENT, USER_AGENT);
             HttpRequest<R> request = req.build();
             HttpResponse res = HttpExecutor.create().execute(request);
-            
+
             reqIdContainer.remove();
-             
+
             String reqId = null;
-            if(res.headers().containsKey(ClientConstants.X_COMPUTE_REQUEST_ID)) {
-            	reqId = res.header(ClientConstants.X_COMPUTE_REQUEST_ID);
+            if (res.headers().containsKey(ClientConstants.X_COMPUTE_REQUEST_ID)) {
+                reqId = res.header(ClientConstants.X_COMPUTE_REQUEST_ID);
             } else {
-            	reqId = res.header(ClientConstants.X_OPENSTACK_REQUEST_ID);
+                reqId = res.header(ClientConstants.X_OPENSTACK_REQUEST_ID);
             }
-             
+
             reqIdContainer.set(reqId);
             return res.getEntity(request.getReturnType(), options);
         }
 
         public HttpResponse executeWithResponse() {
-        	HttpResponse res = HttpExecutor.create().execute(req.build());
-        	reqIdContainer.remove();
-            
+            HttpResponse res = HttpExecutor.create().execute(req.build());
+            reqIdContainer.remove();
+
             String reqId = null;
-            if(res.headers().containsKey(ClientConstants.X_COMPUTE_REQUEST_ID)) {
-            	reqId = res.header(ClientConstants.X_COMPUTE_REQUEST_ID);
+            if (res.headers().containsKey(ClientConstants.X_COMPUTE_REQUEST_ID)) {
+                reqId = res.header(ClientConstants.X_COMPUTE_REQUEST_ID);
             } else {
-            	reqId = res.header(ClientConstants.X_OPENSTACK_REQUEST_ID);
+                reqId = res.header(ClientConstants.X_OPENSTACK_REQUEST_ID);
             }
-             
+
             reqIdContainer.set(reqId);
             return res;
         }
@@ -269,8 +299,9 @@ public class BaseOpenStackService {
     }
 
     protected <T> List<T> toList(T[] arr) {
-        if (arr == null)
+        if (arr == null) {
             return Collections.emptyList();
+        }
         return Arrays.asList(arr);
     }
 

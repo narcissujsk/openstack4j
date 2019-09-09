@@ -23,6 +23,8 @@ public final class ClientConstants {
     public static final String HEADER_USER_AGENT = "User-Agent";
     public static final String USER_AGENT = "OpenStack4j / OpenStack Client";
 
+    public static final String  HEADER_X_OpenStack_Ironic_API_Version ="X-OpenStack-Ironic-API-Version";
+
     public static final String CONTENT_TYPE_JSON = "application/json";
     public static final String CONTENT_TYPE_STREAM = "application/stream";
     public static final String CONTENT_TYPE_DIRECTORY = "application/directory";

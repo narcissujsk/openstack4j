@@ -2,12 +2,15 @@ package org.openstack4j.openstack.provider;
 
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.openstack4j.api.APIProvider;
 import org.openstack4j.api.artifact.ArtifactService;
 import org.openstack4j.api.artifact.ToscaTemplatesArtifactService;
 import org.openstack4j.api.barbican.BarbicanService;
 import org.openstack4j.api.barbican.ContainerService;
 import org.openstack4j.api.barbican.SecretService;
+import org.openstack4j.api.baremetal.BaremetalService;
+import org.openstack4j.api.baremetal.NodeService;
 import org.openstack4j.api.compute.ComputeFloatingIPService;
 import org.openstack4j.api.compute.ComputeImageService;
 import org.openstack4j.api.compute.ComputeSecurityGroupService;
@@ -176,6 +179,8 @@ import org.openstack4j.openstack.artifact.internal.ToscaTemplatesArtifactService
 import org.openstack4j.openstack.barbican.internal.BarbicanServiceImpl;
 import org.openstack4j.openstack.barbican.internal.ContainerServiceImpl;
 import org.openstack4j.openstack.barbican.internal.SecretServiceImpl;
+import org.openstack4j.openstack.baremetal.internal.BaremetalServiceImpl;
+import org.openstack4j.openstack.baremetal.internal.NodeServiceImpl;
 import org.openstack4j.openstack.compute.internal.ComputeFloatingIPServiceImpl;
 import org.openstack4j.openstack.compute.internal.ComputeImageServiceImpl;
 import org.openstack4j.openstack.compute.internal.ComputeSecurityGroupServiceImpl;
@@ -346,6 +351,7 @@ import org.openstack4j.openstack.workflow.internal.*;
  * @author Jeremy Unruh
  */
 public class DefaultAPIProvider implements APIProvider {
+    Logger logger = Logger.getLogger("HttpRequest");
 
     private static final Map<Class<?>, Class<?>> bindings = Maps.newHashMap();
     private static final Map<Class<?>, Object> instances = Maps.newConcurrentMap();
@@ -546,6 +552,9 @@ public class DefaultAPIProvider implements APIProvider {
         bind(ActionExecutionService.class, ActionExecutionServiceImpl.class);
         bind(WorkflowEnvironmentService.class, WorkflowEnvironmentServiceImpl.class);
         bind(CronTriggerService.class, CronTriggerServiceImpl.class);
+
+        bind(BaremetalService.class, BaremetalServiceImpl.class);
+        bind(NodeService.class, NodeServiceImpl.class);
     }
 
     /**
@@ -554,8 +563,11 @@ public class DefaultAPIProvider implements APIProvider {
     @SuppressWarnings("unchecked")
     @Override
     public <T> T get(Class<T> api) {
-        if (instances.containsKey(api))
+        logger.info(api);
+        logger.info(instances);
+        if (instances.containsKey(api)) {
             return (T) instances.get(api);
+        }
 
         if (bindings.containsKey(api)) {
             try {

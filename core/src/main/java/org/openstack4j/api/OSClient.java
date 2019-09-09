@@ -2,6 +2,7 @@ package org.openstack4j.api;
 
 import org.openstack4j.api.artifact.ArtifactService;
 import org.openstack4j.api.barbican.BarbicanService;
+import org.openstack4j.api.baremetal.BaremetalService;
 import org.openstack4j.api.compute.ComputeService;
 import org.openstack4j.api.dns.v2.DNSService;
 import org.openstack4j.api.exceptions.RegionEndpointNotFoundException;
@@ -166,6 +167,8 @@ public interface OSClient< T extends OSClient<T>> {
      */
     ComputeService compute();
 
+
+    BaremetalService baremetal();
     /**
      * Returns the Networking Service API
      *
