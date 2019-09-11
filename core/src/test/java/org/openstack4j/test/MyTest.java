@@ -14,6 +14,7 @@ import org.openstack4j.core.transport.Config;
 import org.openstack4j.model.baremetal.Node;
 import org.openstack4j.model.baremetal.NodeCreate;
 import org.openstack4j.model.baremetal.NodePowerState;
+import org.openstack4j.model.baremetal.NodeProvisionState;
 import org.openstack4j.model.baremetal.builder.NodeCreateBuilder;
 import org.openstack4j.model.common.ActionResponse;
 import org.openstack4j.model.compute.Action;
@@ -69,6 +70,9 @@ public class MyTest {
         target.setTarget("power on");
         String re = mapper.writeValueAsString(target);
         logger.info(re);
+        OSClientV3 os = getOpenstackClient();
+        ActionResponse list = os.baremetal().nodes().provision("test", NodeProvisionState.DELETED);
+        logger.info(list);
     }
     @Test
     public void delete() {

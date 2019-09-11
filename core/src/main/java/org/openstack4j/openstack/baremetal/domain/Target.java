@@ -13,8 +13,12 @@ import org.openstack4j.model.ModelEntity;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Target implements ModelEntity {
+    public Target(String target) {
+        this.target = target;
+    }
+    public Target() {
 
-
+    }
     @JsonProperty("target")
     public String target;
 

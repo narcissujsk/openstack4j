@@ -113,20 +113,30 @@ public class NodeServiceImpl extends BaseBaremetalServices implements NodeServic
         return ToActionResponseFunction.INSTANCE.apply(invokePowerActionWithResponse(nodeid, nodePowerState), nodePowerState.getTarget());
     }
 
-    @Override
-    public ActionResponse provision(String nodeid, NodeProvisionState nodeProvisionState) {
-        return null;
-    }
 
 
     protected HttpResponse invokePowerActionWithResponse(String nodeid, NodePowerState powerState)  {
         Target action = new Target();
-        HttpResponse response  = post(Void.class, uri("v1/nodes/%s/states/power", nodeid))
+        action.setTarget(powerState.getTarget());
+        HttpResponse response  = put(Void.class, uri("v1/nodes/%s/states/power", nodeid))
                 .entity(action)
                 .executeWithResponse();
         return response;
     }
+    @Override
+    public ActionResponse provision(String nodeid, NodeProvisionState nodeProvisionState) {
+        return ToActionResponseFunction.INSTANCE.apply(invokeProvisionActionWithResponse(nodeid, nodeProvisionState), nodeProvisionState.name());
 
+    }
+
+    protected HttpResponse invokeProvisionActionWithResponse(String nodeid, NodeProvisionState nodeProvisionState)  {
+        Target action = new Target();
+        action.setTarget(nodeProvisionState.getTarget());
+        HttpResponse response  = put(Void.class, uri("v1/nodes/%s/states/provision", nodeid))
+                .entity(action)
+                .executeWithResponse();
+        return response;
+    }
     public List<? extends Node> listAll(boolean detail) {
         Invocation<Nodes> req = get(Nodes.class, uri("/v1/nodes"+  ((detail) ? "/detail" : "")));
         return req.execute().getList();

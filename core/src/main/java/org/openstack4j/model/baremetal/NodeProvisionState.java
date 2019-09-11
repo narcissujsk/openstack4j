@@ -2,24 +2,33 @@ package org.openstack4j.model.baremetal;
 
 public enum NodeProvisionState {
 
-    ACTIVE,
+    ACTIVE("active"),
 
-    MANAGE,
+    MANAGE("manage"),
 
-    PROVIDE,
+    PROVIDE("provide"),
 
-    DELETED,
+    DELETED("deleted"),
 
-    CLEAN,
+    CLEAN("clean"),
 
-    ADOPT,
+    ADOPT("adopt"),
 
-    REBUILD,
+    REBUILD("rebuild"),
 
-    RESCUE,
+    RESCUE("rescue"),
 
-    UNRESCUE,
+    UNRESCUE("unrescue"),
 
-    INSPECT
+    INSPECT("inspect");
 
+    private String target;
+
+    NodeProvisionState(String target) {
+        this.target=target;
+    }
+
+    public String getTarget() {
+        return target;
+    }
 }
