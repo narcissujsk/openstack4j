@@ -10,6 +10,7 @@ import org.openstack4j.api.barbican.BarbicanService;
 import org.openstack4j.api.barbican.ContainerService;
 import org.openstack4j.api.barbican.SecretService;
 import org.openstack4j.api.baremetal.BaremetalService;
+import org.openstack4j.api.baremetal.IronicPortService;
 import org.openstack4j.api.baremetal.NodeService;
 import org.openstack4j.api.compute.ComputeFloatingIPService;
 import org.openstack4j.api.compute.ComputeImageService;
@@ -179,7 +180,9 @@ import org.openstack4j.openstack.artifact.internal.ToscaTemplatesArtifactService
 import org.openstack4j.openstack.barbican.internal.BarbicanServiceImpl;
 import org.openstack4j.openstack.barbican.internal.ContainerServiceImpl;
 import org.openstack4j.openstack.barbican.internal.SecretServiceImpl;
+import org.openstack4j.openstack.baremetal.domain.IronicPort;
 import org.openstack4j.openstack.baremetal.internal.BaremetalServiceImpl;
+import org.openstack4j.openstack.baremetal.internal.IronicPortServiceImpl;
 import org.openstack4j.openstack.baremetal.internal.NodeServiceImpl;
 import org.openstack4j.openstack.compute.internal.ComputeFloatingIPServiceImpl;
 import org.openstack4j.openstack.compute.internal.ComputeImageServiceImpl;
@@ -555,6 +558,7 @@ public class DefaultAPIProvider implements APIProvider {
 
         bind(BaremetalService.class, BaremetalServiceImpl.class);
         bind(NodeService.class, NodeServiceImpl.class);
+        bind(IronicPortService.class, IronicPortServiceImpl.class);
     }
 
     /**

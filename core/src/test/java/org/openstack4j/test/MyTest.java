@@ -10,11 +10,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
+import org.openstack4j.api.Builders;
 import org.openstack4j.core.transport.Config;
-import org.openstack4j.model.baremetal.Node;
-import org.openstack4j.model.baremetal.NodeCreate;
-import org.openstack4j.model.baremetal.NodePowerState;
-import org.openstack4j.model.baremetal.NodeProvisionState;
+import org.openstack4j.model.baremetal.*;
 import org.openstack4j.model.baremetal.builder.NodeCreateBuilder;
 import org.openstack4j.model.common.ActionResponse;
 import org.openstack4j.model.compute.Action;
@@ -39,25 +37,16 @@ public class MyTest {
 	@Test
 	public void test() {
 		OSClientV3 os = getOpenstackClient();
-		//List<? extends Project> list = os.identity().projects().list();
-       // List<? extends Server> list1 = os.compute().servers().list();
-        List<? extends Node> list = os.baremetal().nodes().list(true);
-		System.out.println("test");
-        //System.out.println(list1.size());
-        //System.out.println(list1.get(0).toString());
-        System.out.println(list.size());
-		System.out.println(list.get(0).toString());
-        for (int i = 0; i < list.size(); i++) {
-            logger.info(list.get(i));
-        }
+        Flavor flavor= Builders.flavor().build();
+        os.compute().flavors().create(flavor);
 		System.out.println("test");
 	}
     @Test
     public void get() {
         OSClientV3 os = getOpenstackClient();
-        Node list = os.baremetal().nodes().get("test");
-        logger.info(list);
-        logger.info(list.getName());
+        Node  node = os.baremetal().nodes().get("test");
+        logger.info(node);
+        logger.info(node.getName());
     }
     @Test
     public void poweron() throws JsonProcessingException {
@@ -80,15 +69,17 @@ public class MyTest {
         ActionResponse list = os.baremetal().nodes().delete("test");
         logger.info(list);
     }
-
+    @Test
+    public void createPort() {
+        OSClientV3 os = getOpenstackClient();
+        List<? extends Port> list = os.baremetal().ports().list();
+        logger.info(list);
+    }
     @Test
     public void create() {
         OSClientV3 os = getOpenstackClient();
-        NodeCreate node =  os.baremetal().nodes()
-                .nodeBuilder()
-                .name("test")
-                .driver("fake")
-                .build();
+        NodeCreate node =Builders.node().name("test")
+                .driver("fake").build();
         Node list = os.baremetal().nodes().create(node);
         logger.info(list);
     }

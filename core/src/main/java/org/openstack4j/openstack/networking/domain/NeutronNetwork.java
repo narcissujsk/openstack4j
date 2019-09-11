@@ -67,6 +67,7 @@ public class NeutronNetwork implements Network {
      * Wraps this Network into a Builder
      * @return the network builder
      */
+    @Override
     public NetworkBuilder toBuilder() {
         return new NetworkConcreteBuilder(this);
     }

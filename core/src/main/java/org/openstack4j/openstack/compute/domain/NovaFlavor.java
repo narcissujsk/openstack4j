@@ -259,7 +259,8 @@ public class NovaFlavor implements Flavor {
 		/**
 		 * @see Flavor#isPublic()
 		 */
-		public FlavorBuilder isPublic(boolean isPublic) {
+		@Override
+        public FlavorBuilder isPublic(boolean isPublic) {
 			m.isPublic = isPublic;
 			return this;
 		}

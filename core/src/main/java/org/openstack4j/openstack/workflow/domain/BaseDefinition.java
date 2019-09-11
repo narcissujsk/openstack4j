@@ -97,6 +97,7 @@ public abstract class BaseDefinition implements Definition {
             this.model = model;
         }
 
+        @Override
         public M build() {
             return model;
         }

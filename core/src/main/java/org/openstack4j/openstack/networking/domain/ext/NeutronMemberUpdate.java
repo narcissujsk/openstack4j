@@ -105,7 +105,8 @@ public class NeutronMemberUpdate implements MemberUpdate {
 	 * Wraps this MemberUpdate into a Builder
 	 * @return the network builder
 	 */
-	public MemberUpdateBuilder toBuilder() {
+	@Override
+    public MemberUpdateBuilder toBuilder() {
 		return new MemberUpdateConcreteBuilder(this);
 	}
 

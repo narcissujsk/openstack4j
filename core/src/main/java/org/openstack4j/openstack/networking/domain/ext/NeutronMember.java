@@ -228,7 +228,8 @@ public class NeutronMember implements Member {
 	 * Wraps this Member into a Builder
 	 * @return the network builder
 	 */
-	public MemberBuilder toBuilder() {
+	@Override
+    public MemberBuilder toBuilder() {
 		return new MemberConcreteBuilder(this);
 	}
 

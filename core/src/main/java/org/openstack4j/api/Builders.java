@@ -6,6 +6,8 @@ import org.openstack4j.model.barbican.Secret;
 import org.openstack4j.model.barbican.builder.ContainerCreateBuilder;
 import org.openstack4j.model.barbican.builder.ContainerSecretBuilder;
 import org.openstack4j.model.barbican.builder.SecretCreateBuilder;
+import org.openstack4j.model.baremetal.builder.IronicPortBuilder;
+import org.openstack4j.model.baremetal.builder.NodeCreateBuilder;
 import org.openstack4j.model.common.builder.LinkBuilder;
 import org.openstack4j.model.compute.builder.*;
 import org.openstack4j.model.dns.v2.builder.DNSV2Builders;
@@ -56,6 +58,8 @@ import org.openstack4j.model.workflow.builder.WorkflowBuilders;
 import org.openstack4j.openstack.barbican.domain.BarbicanContainer;
 import org.openstack4j.openstack.barbican.domain.BarbicanContainerSecret;
 import org.openstack4j.openstack.barbican.domain.BarbicanSecret;
+import org.openstack4j.openstack.baremetal.domain.IronicNodeCreate;
+import org.openstack4j.openstack.baremetal.domain.IronicPort;
 import org.openstack4j.openstack.common.GenericLink;
 import org.openstack4j.openstack.compute.builder.NovaBuilders;
 import org.openstack4j.openstack.compute.domain.*;
@@ -133,6 +137,10 @@ public class Builders {
      */
     public static ServerCreateBuilder server() {
         return NovaServerCreate.builder();
+    }
+
+    public static NodeCreateBuilder node() {
+        return IronicNodeCreate.builder();
     }
 
     public static BlockDeviceMappingBuilder blockDeviceMapping() {
@@ -231,6 +239,11 @@ public class Builders {
      */
     public static PortBuilder port() {
         return NeutronPort.builder();
+    }
+
+
+    public static IronicPortBuilder ironicPort() {
+        return IronicPort.builder();
     }
 
     /**

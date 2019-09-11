@@ -7,7 +7,7 @@ import org.openstack4j.model.baremetal.Port;
 import java.util.List;
 
 
-public interface PortService extends RestService {
+public interface IronicPortService extends RestService {
 
 	List<? extends Port> list();
 	

@@ -21,7 +21,7 @@ public interface BaremetalService extends RestService {
 	 */
     NodeService nodes();
 
-  //  PortService ports();
+    IronicPortService ports();
 
 
 }

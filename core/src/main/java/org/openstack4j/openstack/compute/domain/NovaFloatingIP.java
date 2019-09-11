@@ -39,6 +39,7 @@ public class NovaFloatingIP implements FloatingIP {
   /**
    * {@inheritDoc}
    */
+  @Override
   public FloatingIPBuilder toBuilder() {
     return new FloatingIPConcreteBuilder(this);
   }
