@@ -5,6 +5,9 @@ import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.concurrent.ConcurrentHashMap;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
 import com.google.common.collect.SortedSetMultimap;
 
@@ -29,7 +32,7 @@ public class DefaultEndpointURLResolver implements EndpointURLResolver {
     private static final Map<Key, String> CACHE = new ConcurrentHashMap<Key, String>();
     private static boolean LEGACY_EP_HANDLING = Boolean.getBoolean(LEGACY_EP_RESOLVING_PROP);
     private String publicHostIP;
-    
+    org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger("RequestBuilder");
     @Override
     public String findURLV2(URLResolverParams p) {
         if (p.type == null) {
@@ -56,7 +59,14 @@ public class DefaultEndpointURLResolver implements EndpointURLResolver {
 
     @Override
     public String findURLV3(URLResolverParams p) {
-
+        try {
+            logger.info("URLResolverParams region "+p.region);
+            logger.info("URLResolverParams type "+p.type);
+            logger.info("URLResolverParams getCacheIdentifier "+p.token.getCacheIdentifier());
+            logger.info("URLResolverParams perspective "+p.perspective);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (p.type == null) {
             return p.token.getEndpoint();
         }

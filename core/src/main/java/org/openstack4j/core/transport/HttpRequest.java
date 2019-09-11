@@ -34,6 +34,23 @@ public class HttpRequest<R> {
     private Map<String, Object> headers = new HashMap<String, Object>();
     private Function<String, String> endpointFunc;
 
+    @Override
+    public String toString() {
+        return "HttpRequest{" +
+                "endpoint='" + endpoint + '\'' +
+                ", path='" + path + '\'' +
+                ", returnType=" + returnType +
+                ", entity=" + entity +
+                ", contentType='" + contentType + '\'' +
+                ", method=" + method +
+                ", json='" + json + '\'' +
+                ", config=" + config +
+                ", queryParams=" + queryParams +
+                ", headers=" + headers +
+                ", endpointFunc=" + endpointFunc +
+                '}';
+    }
+
     public HttpRequest() {
     }
 
@@ -174,6 +191,38 @@ public class HttpRequest<R> {
     }
 
     public static final class RequestBuilder<R> {
+        @Override
+        public String toString() {
+            return "RequestBuilder{" +
+                    "request=" + request +
+                    ", provider=" + provider +
+                    ", service=" + service +
+                    '}';
+        }
+
+        public HttpRequest<R> getRequest() {
+            return request;
+        }
+
+        public void setRequest(HttpRequest<R> request) {
+            this.request = request;
+        }
+
+        public EndpointTokenProvider getProvider() {
+            return provider;
+        }
+
+        public void setProvider(EndpointTokenProvider provider) {
+            this.provider = provider;
+        }
+
+        public ServiceType getService() {
+            return service;
+        }
+
+        public void setService(ServiceType service) {
+            this.service = service;
+        }
 
         HttpRequest<R> request;
         EndpointTokenProvider provider;

@@ -78,8 +78,6 @@ public class BaseOpenStackService {
     }
 
     protected <R> Invocation<R> delete(Class<R> returnType, String... path) {
-        System.out.println(path);
-        logger.info("" + path + " ");
         return builder(returnType, path, HttpMethod.DELETE);
     }
 
@@ -126,8 +124,10 @@ public class BaseOpenStackService {
         Map headers = ses.getHeaders();
         Config config = ses.getConfig();
         if (headers == null) {
-            headers=new HashMap<String,Object> ();
+            headers = new HashMap<String, Object>();
         }
+        logger.info(req.toString());
+        logger.info(req.getRequest().toString());
         logger.info(ClientConstants.HEADER_X_OpenStack_Ironic_API_Version);
         logger.info(config.getIronicApiVersion());
         logger.info(config.isIronicApiVersionEnable());
@@ -241,7 +241,7 @@ public class BaseOpenStackService {
             header(HEADER_USER_AGENT, USER_AGENT);
             HttpRequest<R> request = req.build();
             HttpResponse res = HttpExecutor.create().execute(request);
-
+            logger.info(" ");
             reqIdContainer.remove();
 
             String reqId = null;
@@ -258,7 +258,7 @@ public class BaseOpenStackService {
         public HttpResponse executeWithResponse() {
             HttpResponse res = HttpExecutor.create().execute(req.build());
             reqIdContainer.remove();
-
+            logger.info("HttpResponse : "+res.getStatusMessage()+"    " +res.getStatus());
             String reqId = null;
             if (res.headers().containsKey(ClientConstants.X_COMPUTE_REQUEST_ID)) {
                 reqId = res.header(ClientConstants.X_COMPUTE_REQUEST_ID);

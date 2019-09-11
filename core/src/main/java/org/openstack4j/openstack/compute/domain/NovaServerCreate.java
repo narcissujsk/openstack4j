@@ -160,15 +160,17 @@ public class NovaServerCreate implements ServerCreate {
 
     @Override
     public void addPersonality(String path, String contents) {
-        if (personality == null)
+        if (personality == null) {
             personality = Lists.newArrayList();
+        }
         personality.add(new Personality(path, contents));
     }
 
     @Override
     public void addSecurityGroup(String name) {
-        if (securityGroups == null)
+        if (securityGroups == null) {
             securityGroups = Lists.newArrayList();
+        }
         securityGroups.add(new SecurityGroupInternal(name));
     }
 
@@ -185,8 +187,9 @@ public class NovaServerCreate implements ServerCreate {
     }
 
     private void initNetworks() {
-        if (networks == null)
+        if (networks == null) {
             networks = Lists.newArrayList();
+        }
     }
     
     static class SecurityGroupInternal implements SecurityGroup {
@@ -269,17 +272,21 @@ public class NovaServerCreate implements ServerCreate {
 
         @Override
         public ServerCreateBuilder addSecurityGroup(String name) {
-            if (name != null && !name.isEmpty())
+            if (name != null && !name.isEmpty()) {
                 m.addSecurityGroup(name);
+            }
             return this;
         }
 
         @Override
         public ServerCreateBuilder addPersonality(String path, String contents) {
-            if (path == null || contents == null) return this;
+            if (path == null || contents == null) {
+                return this;
+            }
 
-            if (m.personality == null)
+            if (m.personality == null) {
                 m.personality = Lists.newArrayList();
+            }
             m.personality.add(new Personality(path, new BinaryNode(contents.getBytes()).asText()));
             return this;
         }
@@ -325,8 +332,9 @@ public class NovaServerCreate implements ServerCreate {
 
         @Override
         public ServerCreateBuilder addMetadataItem(String key, String value) {
-            if (m.metadata == null)
+            if (m.metadata == null) {
                 m.metadata = Maps.newHashMap();
+            }
             
             m.metadata.put(key, value);
             return this;
@@ -349,8 +357,9 @@ public class NovaServerCreate implements ServerCreate {
         }
         
         private ServerCreateBuilder addSchedulerHintItem(String key, Object value) {
-            if (m.schedulerHints == null)
+            if (m.schedulerHints == null) {
                 m.schedulerHints = Maps.newHashMap();
+            }
             
             m.schedulerHints.put(key, value);
             return this;

@@ -5,17 +5,23 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
 import org.openstack4j.core.transport.Config;
 import org.openstack4j.model.baremetal.Node;
+import org.openstack4j.model.baremetal.NodeCreate;
+import org.openstack4j.model.baremetal.NodePowerState;
+import org.openstack4j.model.baremetal.builder.NodeCreateBuilder;
 import org.openstack4j.model.common.ActionResponse;
 import org.openstack4j.model.compute.Action;
 import org.openstack4j.model.compute.Server;
 import org.openstack4j.model.compute.ServerCreate;
 import org.openstack4j.model.identity.v3.Project;
 import org.openstack4j.model.sahara.Cluster;
+import org.openstack4j.openstack.baremetal.domain.Target;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -48,11 +54,48 @@ public class MyTest {
     @Test
     public void get() {
         OSClientV3 os = getOpenstackClient();
-       // ServerCreate server = os.compute().servers().serverBuilder().flavor("").build();
-        //os.compute().servers().boot(server);
         Node list = os.baremetal().nodes().get("test");
         logger.info(list);
+        logger.info(list.getName());
     }
+    @Test
+    public void poweron() throws JsonProcessingException {
+        NodePowerState powerState=NodePowerState.POWEROFF;
+        logger.info(powerState.name());
+        logger.info(powerState.getTarget());
+        logger.info(powerState.getClass().getName());
+        ObjectMapper mapper = new ObjectMapper();
+        Target target=new Target();
+        target.setTarget("power on");
+        String re = mapper.writeValueAsString(target);
+        logger.info(re);
+    }
+    @Test
+    public void delete() {
+        OSClientV3 os = getOpenstackClient();
+        ActionResponse list = os.baremetal().nodes().delete("test");
+        logger.info(list);
+    }
+
+    @Test
+    public void create() {
+        OSClientV3 os = getOpenstackClient();
+        NodeCreate node =  os.baremetal().nodes()
+                .nodeBuilder()
+                .name("test")
+                .driver("fake")
+                .build();
+        Node list = os.baremetal().nodes().create(node);
+        logger.info(list);
+    }
+
+    public void testCreate(){
+        OSClientV3 os = getOpenstackClient();
+        ServerCreate server = os.compute().servers().serverBuilder().flavor("").build();
+        os.compute().servers().boot(server);
+        os.compute().servers().instanceActions().list("");
+	}
+
     @Test
     public void testPoweron() {
         OSClientV3 os = getOpenstackClient();
@@ -78,7 +121,7 @@ public class MyTest {
         config.withIronicApiVersion("1.37");
 		Identifier domainIdentifier = Identifier.byName(domainname);
 		OSClientV3 os = OSFactory.builderV3().endpoint(v3url).credentials(name, password, domainIdentifier)
-				.withConfig(config).authenticate();
+				.withConfig(config).authenticate().useRegion("inspurtest");
 		return os;
 	}
 }

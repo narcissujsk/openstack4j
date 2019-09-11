@@ -24,7 +24,9 @@ public class HttpExecutor  {
     private HttpExecutor() {}
 
     private HttpExecutorService service() {
-        if (service != null) return service;
+        if (service != null) {
+            return service;
+        }
 
         Iterator<HttpExecutorService> it = ServiceLoader.load(HttpExecutorService.class, getClass().getClassLoader()).iterator();
         if (!it.hasNext())

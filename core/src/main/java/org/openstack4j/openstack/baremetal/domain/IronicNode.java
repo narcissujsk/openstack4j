@@ -458,15 +458,7 @@ public class IronicNode implements Node {
         return instanceUuid;
     }
 
-    @Override
-    public String toString() {
-        try {
-            return new ObjectMapper().writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return this.uuid;
-    }
+
 
     @Override
     public JSONObject getInstanceInfo() {
@@ -598,5 +590,15 @@ public class IronicNode implements Node {
 
     public void setAllocationUuid(String allocationUuid) {
         this.allocationUuid = allocationUuid;
+    }
+
+    @Override
+    public String toString() {
+        try {
+            return new ObjectMapper().writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return this.uuid;
     }
 }
