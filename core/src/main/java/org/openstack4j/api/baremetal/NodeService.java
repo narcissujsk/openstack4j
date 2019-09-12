@@ -1,6 +1,7 @@
 package org.openstack4j.api.baremetal;
 
 import org.openstack4j.common.RestService;
+import org.openstack4j.model.artifact.ArtifactUpdate;
 import org.openstack4j.model.baremetal.*;
 import org.openstack4j.model.baremetal.builder.NodeCreateBuilder;
 import org.openstack4j.model.common.ActionResponse;
@@ -27,6 +28,7 @@ public interface NodeService extends RestService {
 
     NodeCreateBuilder nodeBuilder();
 
+    Node update(String nodeid, List<ArtifactUpdate> update);
 
     ActionResponse power(String nodeid,NodePowerState nodePowerState);
 

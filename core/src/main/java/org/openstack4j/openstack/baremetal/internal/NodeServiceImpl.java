@@ -11,10 +11,8 @@ import org.openstack4j.core.transport.ExecutionOptions;
 import org.openstack4j.core.transport.HttpResponse;
 import org.openstack4j.core.transport.propagation.PropagateOnStatus;
 import org.openstack4j.model.ModelEntity;
-import org.openstack4j.model.baremetal.Node;
-import org.openstack4j.model.baremetal.NodeCreate;
-import org.openstack4j.model.baremetal.NodePowerState;
-import org.openstack4j.model.baremetal.NodeProvisionState;
+import org.openstack4j.model.artifact.ArtifactUpdate;
+import org.openstack4j.model.baremetal.*;
 import org.openstack4j.model.baremetal.builder.NodeCreateBuilder;
 import org.openstack4j.model.common.ActionResponse;
 import org.openstack4j.model.compute.*;
@@ -27,7 +25,9 @@ import org.openstack4j.model.compute.actions.RebuildOptions;
 import org.openstack4j.model.compute.builder.ServerCreateBuilder;
 import org.openstack4j.openstack.baremetal.domain.IronicNode;
 import org.openstack4j.openstack.baremetal.domain.IronicNodeCreate;
+import org.openstack4j.openstack.baremetal.domain.IronicPort;
 import org.openstack4j.openstack.baremetal.domain.Target;
+import org.openstack4j.openstack.common.ListEntity;
 import org.openstack4j.openstack.common.ListResult;
 import org.openstack4j.openstack.common.Metadata;
 import org.openstack4j.openstack.compute.domain.*;
@@ -94,7 +94,12 @@ public class NodeServiceImpl extends BaseBaremetalServices implements NodeServic
                 .entity(node)
                 .execute();
     }
+    @Override
+    public Node update(String nodeid, List<ArtifactUpdate> update) {
+        checkNotNull(update);
+        return  patch(IronicNode.class, uri("/v1/nodes/%s", nodeid)).entity(new ListEntity<ArtifactUpdate>(update)).execute();
 
+    }
     @Override
     public ActionResponse delete(String nodeid) {
         checkNotNull(nodeid);

@@ -114,6 +114,17 @@ public class MyTest {
         logger.info(re);
 
     }
+
+    @Test
+    public void updateNode() {
+        OSClientV3 os = getOpenstackClient();
+        ArtifactUpdate up = Builders.artifactUpdate().op("add").path("/driver_info/deploy_ramdisk").value("t").build();
+        List uplist=new ArrayList<ArtifactUpdate>();
+        uplist.add(up);
+        Node re = os.baremetal().nodes().update("a033fa08-fd5a-4cab-bae4-6772b94019cc", uplist);
+        logger.info(re);
+
+    }
     @Test
     public void create() {
         OSClientV3 os = getOpenstackClient();
