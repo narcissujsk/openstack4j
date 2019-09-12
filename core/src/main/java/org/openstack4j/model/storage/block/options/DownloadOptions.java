@@ -34,8 +34,9 @@ public class DownloadOptions {
      */
     public DownloadOptions range(Range... ranges) {
         HeaderNameValue h = RangesToHeaderNameValue.INSTANCE.apply(ranges);
-        if (h != null)
+        if (h != null) {
             headers.add(h);
+        }
         return this;
     }
     
@@ -63,8 +64,9 @@ public class DownloadOptions {
      */
     public DownloadOptions conditions(IfCondition... condition) {
         if (condition != null) {
-            for (IfCondition c : condition)
+            for (IfCondition c : condition) {
                 headers.add(c.toHeader());
+            }
         }
         return this;
     }
