@@ -1,6 +1,7 @@
 package org.openstack4j.api.baremetal;
 
 import org.openstack4j.common.RestService;
+import org.openstack4j.model.artifact.ArtifactUpdate;
 import org.openstack4j.model.baremetal.*;
 import org.openstack4j.model.common.ActionResponse;
 
@@ -14,7 +15,9 @@ public interface IronicPortService extends RestService {
 
 	Port get(String uuid);
 
-    public Port create(Port port);
+     Port create(Port port);
+    Port update(String portid,List<ArtifactUpdate> update);
+
 
     ActionResponse delete(String uuid);
 }

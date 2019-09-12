@@ -12,6 +12,7 @@ import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
 import org.openstack4j.api.Builders;
 import org.openstack4j.core.transport.Config;
+import org.openstack4j.model.artifact.ArtifactUpdate;
 import org.openstack4j.model.baremetal.*;
 import org.openstack4j.model.baremetal.builder.NodeCreateBuilder;
 import org.openstack4j.model.common.ActionResponse;
@@ -24,6 +25,7 @@ import org.openstack4j.openstack.baremetal.domain.Target;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.openstack4j.api.OSClient.OSClientV3;
@@ -80,7 +82,7 @@ public class MyTest {
     @Test
     public void getPort() {
         OSClientV3 os = getOpenstackClient();
-        Port re = os.baremetal().ports().get("48ab54ec-33c9-4fee-8ccd-2c51ec851c26");
+        Port re = os.baremetal().ports().get("a033fa08-fd5a-4cab-bae4-6772b94019cc");
         logger.info(re==null);
         logger.info(re);
     }
@@ -99,6 +101,17 @@ public class MyTest {
         logger.info(port);
         Port re = os.baremetal().ports().create(port);
         logger.info(re.getUuid());
+
+    }
+
+    @Test
+    public void updatePort() {
+        OSClientV3 os = getOpenstackClient();
+        ArtifactUpdate up = Builders.artifactUpdate().op("add").path("/local_link_connection/switch_info").value("t").build();
+        List uplist=new ArrayList<ArtifactUpdate>();
+        uplist.add(up);
+        Port re = os.baremetal().ports().update("34b95a0f-0f8a-4906-887d-d0ce5a86d718", uplist);
+        logger.info(re);
 
     }
     @Test
