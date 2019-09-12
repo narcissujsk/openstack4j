@@ -73,16 +73,32 @@ public class MyTest {
     @Test
     public void getPorts() {
         OSClientV3 os = getOpenstackClient();
-        List<? extends Port> list = os.baremetal().ports().list();
+        List<? extends Port> list = os.baremetal().ports().list(true);
         logger.info(list);
     }
+
+    @Test
+    public void getPort() {
+        OSClientV3 os = getOpenstackClient();
+        Port re = os.baremetal().ports().get("48ab54ec-33c9-4fee-8ccd-2c51ec851c26");
+        logger.info(re==null);
+        logger.info(re);
+    }
+
+    @Test
+    public void deletePort() {
+        OSClientV3 os = getOpenstackClient();
+        ActionResponse re = os.baremetal().ports().delete("48ab54ec-33c9-4fee-8ccd-2c51ec851c26");
+        logger.info(re);
+    }
+    //48ab54ec-33c9-4fee-8ccd-2c51ec851c26
     @Test
     public void createPort() {
         OSClientV3 os = getOpenstackClient();
-        Port port = Builders.ironicPort().address("6c:92:bf:74:81:11").nodeUuid("a033fa08-fd5a-4cab-bae4-6772b94019cc").build();
+        Port port = Builders.ironicPort().address("6c:92:bf:74:81:12").nodeUuid("a033fa08-fd5a-4cab-bae4-6772b94019cc").build();
         logger.info(port);
         Port re = os.baremetal().ports().create(port);
-        logger.info(re);
+        logger.info(re.getUuid());
 
     }
     @Test

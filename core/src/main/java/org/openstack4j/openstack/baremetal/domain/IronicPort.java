@@ -1,9 +1,11 @@
 package org.openstack4j.openstack.baremetal.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.sf.json.JSONObject;
 import org.openstack4j.model.baremetal.Port;
 import org.openstack4j.model.baremetal.builder.IronicPortBuilder;
 import org.openstack4j.model.common.Link;
@@ -27,11 +29,113 @@ public class IronicPort implements Port {
     @JsonProperty("address")
     public String address;
 
+    @JsonProperty("created_at")
+    public String createdAt;
+
+    @JsonProperty("updated_at")
+    public String updatedAt;
+
+    @JsonProperty("physical_network")
+    public String physicalNetwork;
+
+    @JsonProperty("portgroup_uuid")
+    public String portgroupUuid;
+
     @JsonProperty("node_uuid")
     public String nodeUuid;
 
     public List<GenericLink> links;
 
+
+
+    @JsonProperty("pxe_enabled")
+    public boolean pxeEnabled;
+
+    @JsonProperty("extra")
+    public JSONObject extra;
+
+    @JsonProperty("internal_info")
+    public JSONObject internalInfo;
+
+    @JsonProperty("local_link_connection")
+    public IronicPortLocalLinkConnection localLinkConnection;
+
+    @Override
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    @Override
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public String getPhysicalNetwork() {
+        return physicalNetwork;
+    }
+
+    public void setPhysicalNetwork(String physicalNetwork) {
+        this.physicalNetwork = physicalNetwork;
+    }
+
+    @Override
+    public String getPortgroupUuid() {
+        return portgroupUuid;
+    }
+
+    public void setPortgroupUuid(String portgroupUuid) {
+        this.portgroupUuid = portgroupUuid;
+    }
+
+
+    public boolean isPxeEnabled() {
+        return pxeEnabled;
+    }
+
+    public void setPxeEnabled(boolean pxeEnabled) {
+        this.pxeEnabled = pxeEnabled;
+    }
+
+    @Override
+    public JSONObject getExtra() {
+        return extra;
+    }
+
+    public void setExtra(JSONObject extra) {
+        this.extra = extra;
+    }
+
+    @Override
+    public JSONObject getInternalInfo() {
+        return internalInfo;
+    }
+
+    public void setInternalInfo(JSONObject internalInfo) {
+        this.internalInfo = internalInfo;
+    }
+
+    @Override
+    public IronicPortLocalLinkConnection getLocalLinkConnection() {
+        return localLinkConnection;
+    }
+
+    @Override
+    public boolean getPxeEnabled() {
+        return pxeEnabled;
+    }
+
+    public void setLocalLinkConnection(IronicPortLocalLinkConnection localLinkConnection) {
+        this.localLinkConnection = localLinkConnection;
+    }
 
     @Override
     public String getUuid() {

@@ -21,8 +21,9 @@ public class NovaAddresses implements Addresses {
 
 	@Override
 	public void add(String key, Address value) {
-		if (!addresses.containsKey(key))
-			addresses.put(key, Lists.<NovaAddress>newArrayList());
+		if (!addresses.containsKey(key)) {
+            addresses.put(key, Lists.<NovaAddress>newArrayList());
+        }
 
 		addresses.get(key).add((NovaAddress) value);
 	}

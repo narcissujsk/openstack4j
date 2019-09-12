@@ -50,13 +50,15 @@ public final class HttpCommand<R> {
     private void initialize() {
         Client client = ClientFactory.create(request.getConfig());
         //try to set unsupported HTTP method. In our case used for PATCH.
-        if( request.getMethod().name()=="PATCH" )
+        if( request.getMethod().name()=="PATCH" ) {
             client.property(HttpUrlConnectorProvider.SET_METHOD_WORKAROUND, true);
+        }
         
         WebTarget target = client.target(request.getEndpoint()).path(request.getPath());
         
-        if (HttpLoggingFilter.isLoggingEnabled())
+        if (HttpLoggingFilter.isLoggingEnabled()) {
             target.register(new LoggingFilter(Logger.getLogger("os"), 10000));
+        }
 
         target = populateQueryParams(target, request);
         invocation = target.request(MediaType.APPLICATION_JSON);

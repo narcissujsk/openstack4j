@@ -35,6 +35,10 @@ public class IronicPortServiceImpl extends BaseBaremetalServices implements Iron
     public List<? extends Port> list() {
         return get(IronicPorts.class, uri("v1/ports")).execute().getList();
     }
+    @Override
+    public List<? extends Port> list(boolean detail) {
+        return get(IronicPorts.class, uri("v1/ports/detail")).execute().getList();
+    }
 
     @Override
     public Port get(String uuid) {
@@ -50,6 +54,15 @@ public class IronicPortServiceImpl extends BaseBaremetalServices implements Iron
                 .entity(port)
                 .execute();
     }
+
+    @Override
+    public ActionResponse delete(String portid) {
+        checkNotNull(portid);
+        return ToActionResponseFunction.INSTANCE.apply(
+                delete(Void.class, uri("/v1/ports/%s", portid)).executeWithResponse()
+        );
+    }
+
 
     public static class IronicPorts extends ListResult<IronicPort> {
 

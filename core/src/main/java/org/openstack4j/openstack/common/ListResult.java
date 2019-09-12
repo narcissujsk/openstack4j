@@ -18,8 +18,9 @@ public abstract class ListResult<T> implements ModelEntity, ListType {
 	protected abstract List<T> value();
 	
 	public List<T> getList() {
-		if (value() == null)
-			return Collections.emptyList();
+		if (value() == null) {
+            return Collections.emptyList();
+        }
 		return value();
 	}
 

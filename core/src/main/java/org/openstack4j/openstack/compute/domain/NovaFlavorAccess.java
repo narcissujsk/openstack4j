@@ -83,7 +83,8 @@ public class NovaFlavorAccess implements FlavorAccess {
 			this.tenantId = tenantId;
 		}
 
-		public String getTenantId() {
+		@Override
+        public String getTenantId() {
 			return tenantId;
 		}
 

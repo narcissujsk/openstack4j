@@ -50,6 +50,7 @@ public class HttpResponseImpl implements HttpResponse {
      * @param returnType the return type
      * @return the entity
      */
+    @Override
     public <T> T getEntity(Class<T> returnType) {
         return getEntity(returnType, null);
     }
@@ -72,6 +73,7 @@ public class HttpResponseImpl implements HttpResponse {
      *
      * @return the status code
      */
+    @Override
     public int getStatus() {
         return response.getStatusLine().getStatusCode();
     }
@@ -87,11 +89,13 @@ public class HttpResponseImpl implements HttpResponse {
     /**
      * @return the input stream
      */
+    @Override
     public InputStream getInputStream() {
         HttpEntity entity = response.getEntity();
         try {
-            if (entity != null)
+            if (entity != null) {
                 return entity.getContent();
+            }
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
         }
@@ -104,6 +108,7 @@ public class HttpResponseImpl implements HttpResponse {
      * @param name the name of the header to query for
      * @return the header as a String or null if not found
      */
+    @Override
     public String header(String name) {
         Header header = response.getFirstHeader(name);
         return (header != null) ? header.getValue() : null;
@@ -112,6 +117,7 @@ public class HttpResponseImpl implements HttpResponse {
     /**
      * @return the a Map of Header Name to Header Value
      */
+    @Override
     public Map<String, String> headers() {
         Map<String, String> retHeaders = new HashMap<String, String>();
         Header[] headers =  response.getAllHeaders();
@@ -140,8 +146,9 @@ public class HttpResponseImpl implements HttpResponse {
 
     @Override
     public void close() throws IOException {
-        if (response != null)
+        if (response != null) {
             response.close();
+        }
     }
 
     @Override
