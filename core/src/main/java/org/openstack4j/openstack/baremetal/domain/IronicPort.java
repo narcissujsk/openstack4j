@@ -89,8 +89,6 @@ public class IronicPort implements Port {
             this.m = model;
         }
 
-
-
         @Override
         public IronicPort build() {
             return m;
@@ -104,12 +102,14 @@ public class IronicPort implements Port {
 
         @Override
         public IronicPortBuilder address(String address) {
-            return null;
+            m.address = address;
+            return this;
         }
 
         @Override
         public IronicPortBuilder nodeUuid(String nodeUuid) {
-            return null;
+            m.nodeUuid = nodeUuid;
+            return this;
         }
     }
     @Override

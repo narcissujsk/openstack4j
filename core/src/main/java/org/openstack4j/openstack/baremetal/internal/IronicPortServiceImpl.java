@@ -43,7 +43,13 @@ public class IronicPortServiceImpl extends BaseBaremetalServices implements Iron
     }
 
 
-
+    @Override
+    public Port create(Port port) {
+        checkNotNull(port);
+        return post(IronicPort.class, uri("/v1/ports"))
+                .entity(port)
+                .execute();
+    }
 
     public static class IronicPorts extends ListResult<IronicPort> {
 
