@@ -24,6 +24,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class IronicPort implements Port {
 
+
     @JsonProperty("uuid")
     public String uuid;
     @JsonProperty("address")
@@ -49,7 +50,19 @@ public class IronicPort implements Port {
 
 
     @JsonProperty("pxe_enabled")
-    public boolean pxeEnabled;
+    public Boolean pxeEnabled;
+
+    @JsonProperty("is_smartnic")
+    public Boolean isSmartnic;
+
+    @Override
+    public Boolean getIsSmartnic() {
+        return isSmartnic;
+    }
+
+    public void setIsSmartnic(Boolean smartnic) {
+        isSmartnic = smartnic;
+    }
 
     @JsonProperty("extra")
     public JSONObject extra;
@@ -129,7 +142,7 @@ public class IronicPort implements Port {
     }
 
     @Override
-    public boolean getPxeEnabled() {
+    public Boolean getPxeEnabled() {
         return pxeEnabled;
     }
 

@@ -95,7 +95,7 @@ public class MyTest {
     @Test
     public void createPort() {
         OSClientV3 os = getOpenstackClient();
-        Port port = Builders.ironicPort().address("6c:92:bf:74:81:12").nodeUuid("a033fa08-fd5a-4cab-bae4-6772b94019cc").build();
+        Port port = Builders.ironicPort().address("6c:92:bf:74:81:42").nodeUuid("a033fa08-fd5a-4cab-bae4-6772b94019cc").build();
         logger.info(port);
         Port re = os.baremetal().ports().create(port);
         logger.info(re.getUuid());

@@ -19,7 +19,7 @@ public interface Port extends ModelEntity, Buildable<IronicPortBuilder> {
 
     LocalLinkConnection getLocalLinkConnection();
 
-    boolean getPxeEnabled();
+    Boolean getPxeEnabled();
 
     String getPhysicalNetwork();
 
@@ -33,4 +33,5 @@ public interface Port extends ModelEntity, Buildable<IronicPortBuilder> {
 
     String getUpdatedAt();
 
+    Boolean getIsSmartnic();
 }
