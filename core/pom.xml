@@ -220,10 +220,11 @@
 
         <dependency>
             <groupId>org.pacesys.openstack4j.connectors</groupId>
-            <artifactId>openstack4j-jersey2</artifactId>
+            <artifactId>openstack4j-httpclient</artifactId>
             <version>3.2.0</version>
         </dependency>
-	</dependencies>
+
+    </dependencies>
 	<reporting>
 		<plugins>
 			<plugin>
