@@ -26,21 +26,21 @@ import org.apache.log4j.Logger;
 public class MyTest {
     Logger logger = Logger.getLogger("RequestBuilder");
 
-    @Test
+   // @Test
     public void test() {
         OSClientV3 os = getOpenstackClient();
         Flavor flavor= Builders.flavor().build();
-        os.compute().flavors().create(flavor);
+        //os.compute().flavors().create(flavor);
         System.out.println("test");
     }
-    @Test
+    //@Test
     public void get() {
         OSClientV3 os = getOpenstackClient();
         Node  node = os.baremetal().nodes().get("test");
         logger.info(node);
         logger.info(node.getName());
     }
-    @Test
+    //@Test
     public void poweron() throws JsonProcessingException {
         NodePowerState powerState=NodePowerState.POWEROFF;
         logger.info(powerState.name());
@@ -55,21 +55,21 @@ public class MyTest {
         ActionResponse list = os.baremetal().nodes().provision("test", NodeProvisionState.DELETED);
         logger.info(list);
     }
-    @Test
+    //@Test
     public void delete() {
         OSClientV3 os = getOpenstackClient();
         ActionResponse list = os.baremetal().nodes().delete("test");
         logger.info(list);
     }
 
-    @Test
+   // @Test
     public void getPorts() {
         OSClientV3 os = getOpenstackClient();
         List<? extends Port> list = os.baremetal().ports().list(true);
         logger.info(list);
     }
 
-    @Test
+    //@Test
     public void getPort() {
         OSClientV3 os = getOpenstackClient();
         Port re = os.baremetal().ports().get("a033fa08-fd5a-4cab-bae4-6772b94019cc");
@@ -77,14 +77,14 @@ public class MyTest {
         logger.info(re);
     }
 
-    @Test
+   // @Test
     public void deletePort() {
         OSClientV3 os = getOpenstackClient();
         ActionResponse re = os.baremetal().ports().delete("48ab54ec-33c9-4fee-8ccd-2c51ec851c26");
         logger.info(re);
     }
     //48ab54ec-33c9-4fee-8ccd-2c51ec851c26
-    @Test
+    //@Test
     public void createPort() {
         OSClientV3 os = getOpenstackClient();
         Port port = Builders.ironicPort().address("6c:92:bf:74:81:42").nodeUuid("a033fa08-fd5a-4cab-bae4-6772b94019cc").build();
@@ -94,7 +94,7 @@ public class MyTest {
 
     }
 
-    @Test
+    //@Test
     public void updatePort() {
         OSClientV3 os = getOpenstackClient();
         ArtifactUpdate up = Builders.artifactUpdate().op("add").path("/local_link_connection/switch_info").value("t").build();
@@ -105,7 +105,7 @@ public class MyTest {
 
     }
 
-    @Test
+    //@Test
     public void updateNode() {
         OSClientV3 os = getOpenstackClient();
         ArtifactUpdate up = Builders.artifactUpdate().op("add").path("/driver_info/deploy_ramdisk").value("t").build();
@@ -115,7 +115,7 @@ public class MyTest {
         logger.info(re);
 
     }
-    @Test
+   // @Test
     public void create() {
         OSClientV3 os = getOpenstackClient();
         NodeCreate node =Builders.node().name("test")
@@ -131,7 +131,7 @@ public class MyTest {
         os.compute().servers().instanceActions().list("");
     }
 
-    @Test
+   // @Test
     public void testPoweron() {
         OSClientV3 os = getOpenstackClient();
         //List<? extends Project> list = os.identity().projects().list();
