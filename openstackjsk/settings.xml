@@ -5,12 +5,7 @@
 
     <servers>
         <server>
-            <id>sonatype-nexus-snapshots</id>
-            <username>narcissujsk</username>
-            <password>385152jskA?1qaz@wsx</password>
-        </server>
-        <server>
-            <id>sonatype-nexus-staging</id>
+            <id>ossrh</id>
             <username>narcissujsk</username>
             <password>385152jskA?1qaz@wsx</password>
         </server>
